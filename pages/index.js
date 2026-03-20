@@ -15,7 +15,7 @@ export default function Home() {
   const [tab, setTab] = useState('coach');
   const [messages, setMessages] = useState([{
     role: 'assistant',
-    content: 'Salut commandant ! Je suis **Imperator**, coach officiel CivFR calibré sur la meta BBG 7.3 S16.\n\nDécrivez votre situation — civ, adversaires, map, tour — et je vous coach avec précision.'
+    content: 'Bonjour, je suis **la conseillère**.\n\nDécrivez votre situation — civ, adversaires, map, tour — et je tenterais de vous aider.'
   }]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -100,7 +100,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Imperator — Coach CivFR</title>
+        <title>La Conseillère — Coach CivFR</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
       </Head>
@@ -134,7 +134,8 @@ export default function Home() {
         .msg { display: flex; gap: 10px; align-items: flex-start; }
         .msg.user { flex-direction: row-reverse; }
         .av { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: 'Cinzel', serif; font-size: 12px; font-weight: 700; border: 1px solid var(--border2); }
-        .av.bot { background: linear-gradient(135deg,#2A1F08,#4A3820); color: var(--gold); }
+        .av.bot { background: linear-gradient(135deg,#2A1F08,#4A3820); color: var(--gold); overflow: hidden; }
+        .av.bot img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
         .av.usr { background: linear-gradient(135deg,#0A1828,#1A3050); color: #6A9ACC; }
         .bubble { max-width: 82%; padding: 10px 14px; border-radius: 12px; font-size: .95rem; line-height: 1.65; }
         .bubble.bot { background: var(--bg3); border: 1px solid var(--border); border-top-left-radius: 4px; }
@@ -195,12 +196,12 @@ export default function Home() {
 
       <div className="app">
         <header>
-          <h1>⚔ IMPERATOR</h1>
+          <h1>LA CONSEILLÈRE</h1>
           <p>Coach officiel CivFR · BBG 7.3 · Saison 16 · 4v4</p>
         </header>
 
         <nav>
-          {[['coach','⚔ Coach'],['links','🔗 Liens'],['admin','🔐 Admin']].map(([t,l]) => (
+          {[['coach','👩 Conseillère'],['links','🔗 Liens'],['admin','🔐 Admin']].map(([t,l]) => (
             <button key={t} className={tab===t?'active':''} onClick={()=>setTab(t)}>{l}</button>
           ))}
         </nav>
@@ -214,13 +215,13 @@ export default function Home() {
             <div className="chat-window">
               {messages.map((m,i) => (
                 <div key={i} className={`msg ${m.role==='user'?'user':''}`}>
-                  <div className={`av ${m.role==='assistant'?'bot':'usr'}`}>{m.role==='assistant'?'I':'V'}</div>
+                  <div className={`av ${m.role==='assistant'?'bot':'usr'}`}>{m.role==='assistant'?<img src="/conseillere.webp" alt="conseillère"/>:'V'}</div>
                   <div className={`bubble ${m.role==='assistant'?'bot':'usr'}`} dangerouslySetInnerHTML={{__html:fmt(m.content)}} />
                 </div>
               ))}
               {loading && (
                 <div className="msg">
-                  <div className="av bot">I</div>
+                  <div className="av bot"><img src="/conseillere.webp" alt="conseillère"/></div>
                   <div className="bubble bot"><div className="dots">{[0,1,2].map(i=><div key={i} className="dot"/>)}</div></div>
                 </div>
               )}
