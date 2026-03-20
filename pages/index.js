@@ -15,7 +15,7 @@ export default function Home() {
   const [tab, setTab] = useState('coach');
   const [messages, setMessages] = useState([{
     role: 'assistant',
-    content: 'Bonjour, je suis **la conseillère**.\n\nDécrivez votre situation — civ, adversaires, map, tour — et je tenterais de vous aider.'
+    content: 'Bonjour, je suis **la conseillère**.\n\nDécrivez votre situation — civ, adversaires, map, tour — et je tenterai de vous aider.'
   }]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
