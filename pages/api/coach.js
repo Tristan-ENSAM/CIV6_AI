@@ -2,11 +2,7 @@ import { SYSTEM_PROMPT } from '../../lib/knowledge';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
-  const { messages, corrections = [] } = req.body;
-
-  const extra = corrections.length > 0
-    ? '\n\n=== CORRECTIONS COMMUNAUTAIRES ===\n' + corrections.map(c => `[${c.author}] ${c.text}`).join('\n')
-    : '';
+  const { messages } = req.body;
 
   try {
     const r = await fetch('https://api.anthropic.com/v1/messages', {
@@ -19,7 +15,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 1024,
-        system: SYSTEM_PROMPT + extra,
+        system: SYSTEM_PROMPT,
         messages,
       }),
     });
