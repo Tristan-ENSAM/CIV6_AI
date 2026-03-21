@@ -2,13 +2,9 @@ import { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 
 const LINKS = [
-  { label: 'Draft officiel S16', url: 'https://civgg.vercel.app/drafts', desc: 'Ban/pick civs + maps (preset squadrons CivFR)' },
   { label: 'CivFR Data', url: 'https://civfrdata.fr', desc: 'Stats, classements, historique des parties S16' },
-  { label: 'BBG 7.3 — Leaders', url: 'https://civ6bbg.github.io/en_US/leaders_7.3.html', desc: 'Tous les bonus civs et leaders en BBG 7.3' },
-  { label: 'BBG 7.3 — Changelog', url: 'https://civ6bbg.github.io/en_US/changelog_7.3.html', desc: 'Toutes les modifications par rapport au vanilla' },
-  { label: 'BBG 7.3 — Unités', url: 'https://civ6bbg.github.io/en_US/units_7.3.html', desc: 'Stats complètes de toutes les unités' },
-  { label: 'BBG 7.3 — Cités-États', url: 'https://civ6bbg.github.io/en_US/city_states_7.3.html', desc: 'Bonus suzerain de toutes les cités-états' },
-  { label: 'Règlement S16 CivFR', url: 'https://civfr.com', desc: 'Règlement officiel squadrons saison 16' },
+  { label: 'BBG 7.3 — Leaders', url: 'https://civ6bbg.github.io/fr_FR/leaders_7.3.html', desc: 'Site officiel BBG 7.3' },
+  { label: 'Règlement S16 CivFR', url: 'https://docs.google.com/document/d/1zAKkraegP6akhvR7qDl_Xgh7MSPphDvWLDXaRF-dPB8/edit?tab=t.0', desc: 'Règlement officiel squadrons saison 16' },
 ];
 
 const CHIPS = [
