@@ -16,6 +16,11 @@ const CHIPS = [
   'Règle CivFR sur le relobby ?',
 ];
 
+const TOOLS = [
+  { id: 'techtree', label: '⚗ Arbre des technologies', desc: 'Planifiez votre chemin de recherche, eurekas inclus', href: '/tools' },
+  { id: 'civictree', label: '📜 Arbre des dogmes', desc: 'Planifiez votre chemin civique et inspirations', href: '/tools?tree=civic' },
+];
+
 export default function Home() {
   const [tab, setTab] = useState('coach');
   const [messages, setMessages] = useState([{
@@ -118,6 +123,7 @@ export default function Home() {
         .send:hover { opacity: .85; } .send:disabled { opacity: .35; cursor: not-allowed; }
         .send svg { width: 15px; height: 15px; fill: #0A0C10; }
 
+        /* Links */
         .link-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .link-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; text-decoration: none; transition: all .2s; display: block; }
         .link-card:hover { border-color: var(--border2); background: var(--bg4); }
@@ -125,7 +131,20 @@ export default function Home() {
         .link-desc { font-size: .82rem; color: var(--text2); line-height: 1.5; }
         .link-arrow { float: right; color: var(--text3); font-size: .9rem; }
 
-        @media(max-width:600px){ h1{font-size:1.8rem} .link-grid{grid-template-columns:1fr} }
+        /* Tools panel */
+        .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .tool-card {
+          background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+          padding: 20px 18px; text-decoration: none; display: block;
+          transition: all .2s; cursor: pointer;
+        }
+        .tool-card:hover { border-color: var(--border2); background: var(--bg4); transform: translateY(-1px); }
+        .tool-card .tool-icon { font-size: 1.8rem; margin-bottom: 10px; }
+        .tool-card .tool-name { font-family: 'Cinzel',serif; font-size: .9rem; font-weight: 600; color: var(--gold); margin-bottom: 6px; }
+        .tool-card .tool-desc { font-size: .83rem; color: var(--text2); line-height: 1.5; }
+        .tool-card .tool-arrow { font-size: .85rem; color: var(--text3); margin-top: 12px; }
+
+        @media(max-width:600px){ h1{font-size:1.8rem} .link-grid,.tools-grid{grid-template-columns:1fr} }
       `}</style>
 
       <div className="app">
@@ -135,11 +154,12 @@ export default function Home() {
         </header>
 
         <nav>
-          {[['coach','👩 Conseillère'],['links','🔗 Liens']].map(([t,l]) => (
+          {[['coach','👩 Conseillère'],['tools','🛠 Outils'],['links','🔗 Liens']].map(([t,l]) => (
             <button key={t} className={tab===t?'active':''} onClick={()=>setTab(t)}>{l}</button>
           ))}
         </nav>
 
+        {/* ── Conseillère ── */}
         <div className={`panel ${tab==='coach'?'active':''}`}>
           <div className="card">
             <div className="chips">
@@ -171,6 +191,24 @@ export default function Home() {
           </div>
         </div>
 
+        {/* ── Outils ── */}
+        <div className={`panel ${tab==='tools'?'active':''}`}>
+          <div className="card">
+            <div className="card-title">Outils de planification</div>
+            <div className="tools-grid">
+              {TOOLS.map(tool => (
+                <a key={tool.id} href={tool.href} className="tool-card">
+                  <div className="tool-icon">{tool.label.split(' ')[0]}</div>
+                  <div className="tool-name">{tool.label.split(' ').slice(1).join(' ')}</div>
+                  <div className="tool-desc">{tool.desc}</div>
+                  <div className="tool-arrow">Ouvrir l&apos;outil ↗</div>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* ── Liens ── */}
         <div className={`panel ${tab==='links'?'active':''}`}>
           <div className="card">
             <div className="card-title">Outils de la communauté CivFR</div>
