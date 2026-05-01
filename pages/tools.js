@@ -4,18 +4,20 @@ import { useState } from 'react';
 import { TECH_TREE }  from '../lib/techTreeData';
 import { CIVIC_TREE } from '../lib/civicTreeData';
 
-// Chargement dynamique pour éviter SSR (canvas/SVG)
-const TechTreeComponent = dynamic(() => import('../components/TechTreeComponent'), { ssr: false });
+// Chargement dynamique pour éviter SSR (canvas/SVG/state lourd)
+const TechTreeComponent  = dynamic(() => import('../components/TechTreeComponent'),  { ssr: false });
+const CombatCalculator   = dynamic(() => import('../components/CombatCalculator'),   { ssr: false });
 
 export default function Tools() {
-  const [activeTree, setActiveTree] = useState('tech');
+  const [activeTool, setActiveTool] = useState('tech');
 
-  const trees = [
-    { id: 'tech',  label: '⚗ Technologies', data: TECH_TREE  },
-    { id: 'civic', label: '📜 Dogmes',       data: CIVIC_TREE },
+  const tools = [
+    { id: 'tech',   label: '⚗ Technologies', kind: 'tree',   data: TECH_TREE  },
+    { id: 'civic',  label: '📜 Dogmes',       kind: 'tree',   data: CIVIC_TREE },
+    { id: 'combat', label: '⚔ Combat',        kind: 'combat'                   },
   ];
 
-  const currentTree = trees.find(t => t.id === activeTree);
+  const current = tools.find(t => t.id === activeTool);
 
   return (
     <>
@@ -40,7 +42,6 @@ export default function Tools() {
         }
         #__next { display: flex; flex-direction: column; }
 
-        /* ── Header ── */
         .page-header {
           background: #0d0a05;
           border-bottom: 1px solid var(--border);
@@ -54,7 +55,6 @@ export default function Tools() {
         .page-header a:hover { color: var(--gold-light); }
         .page-header .sep { color: var(--text3); }
 
-        /* ── Tree switcher ── */
         .tree-tabs {
           display: flex; gap: 0; border-bottom: 1px solid var(--border);
           background: #0d0a05; flex-shrink: 0;
@@ -71,33 +71,34 @@ export default function Tools() {
         }
         .tree-tab:hover:not(.active) { background: #0d0a05; color: var(--text); }
 
-        /* ── Canvas area ── */
         .tree-area { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
       `}</style>
 
-      {/* Header nav */}
       <div className="page-header">
         <a href="/">← La Conseillère</a>
         <span className="sep">/</span>
         <span style={{ fontFamily:'Cinzel,serif', fontSize:13, color:'var(--text2)' }}>Outils</span>
       </div>
 
-      {/* Switcher Tech / Dogmes */}
       <div className="tree-tabs">
-        {trees.map(t => (
+        {tools.map(t => (
           <button
             key={t.id}
-            className={`tree-tab${activeTree === t.id ? ' active' : ''}`}
-            onClick={() => setActiveTree(t.id)}
+            className={`tree-tab${activeTool === t.id ? ' active' : ''}`}
+            onClick={() => setActiveTool(t.id)}
           >
             {t.label}
           </button>
         ))}
       </div>
 
-      {/* Arbre actif */}
       <div className="tree-area">
-        <TechTreeComponent key={activeTree} treeData={currentTree.data} />
+        {current.kind === 'tree' && (
+          <TechTreeComponent key={current.id} treeData={current.data} />
+        )}
+        {current.kind === 'combat' && (
+          <CombatCalculator key="combat" />
+        )}
       </div>
     </>
   );
