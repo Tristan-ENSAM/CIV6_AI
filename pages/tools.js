@@ -1,23 +1,44 @@
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { TECH_TREE }  from '../lib/techTreeData';
 import { CIVIC_TREE } from '../lib/civicTreeData';
 
 // Chargement dynamique pour éviter SSR (canvas/SVG/state lourd)
-const TechTreeComponent  = dynamic(() => import('../components/TechTreeComponent'),  { ssr: false });
-const CombatCalculator   = dynamic(() => import('../components/CombatCalculator'),   { ssr: false });
+const TechTreeComponent = dynamic(() => import('../components/TechTreeComponent'), { ssr: false });
+const CombatCalculator  = dynamic(() => import('../components/CombatCalculator'),  { ssr: false });
+
+const TOOLS = [
+  { id: 'tech',   label: '⚗ Technologies', kind: 'tree',   data: TECH_TREE  },
+  { id: 'civic',  label: '📜 Dogmes',       kind: 'tree',   data: CIVIC_TREE },
+  { id: 'combat', label: '⚔ Combat',        kind: 'combat'                   },
+];
 
 export default function Tools() {
+  const router = useRouter();
   const [activeTool, setActiveTool] = useState('tech');
 
-  const tools = [
-    { id: 'tech',   label: '⚗ Technologies', kind: 'tree',   data: TECH_TREE  },
-    { id: 'civic',  label: '📜 Dogmes',       kind: 'tree',   data: CIVIC_TREE },
-    { id: 'combat', label: '⚔ Combat',        kind: 'combat'                   },
-  ];
+  // Lecture du paramètre URL au montage et à chaque changement.
+  // Supporte deux formats pour rétrocompatibilité :
+  //   /tools?tool=combat   (nouveau, plus générique)
+  //   /tools?tree=civic    (ancien, conservé pour les liens existants)
+  useEffect(() => {
+    if (!router.isReady) return;
+    const { tool, tree } = router.query;
+    const requested = tool || tree;
+    if (requested && TOOLS.some(t => t.id === requested)) {
+      setActiveTool(requested);
+    }
+  }, [router.isReady, router.query]);
 
-  const current = tools.find(t => t.id === activeTool);
+  const current = TOOLS.find(t => t.id === activeTool);
+
+  // Switch d'onglet : on met à jour l'URL pour permettre le partage du lien
+  const switchTool = (id) => {
+    setActiveTool(id);
+    router.replace({ pathname: '/tools', query: { tool: id } }, undefined, { shallow: true });
+  };
 
   return (
     <>
@@ -81,11 +102,11 @@ export default function Tools() {
       </div>
 
       <div className="tree-tabs">
-        {tools.map(t => (
+        {TOOLS.map(t => (
           <button
             key={t.id}
             className={`tree-tab${activeTool === t.id ? ' active' : ''}`}
-            onClick={() => setActiveTool(t.id)}
+            onClick={() => switchTool(t.id)}
           >
             {t.label}
           </button>

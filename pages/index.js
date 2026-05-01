@@ -17,8 +17,9 @@ const CHIPS = [
 ];
 
 const TOOLS = [
-  { id: 'techtree', label: '⚗ Arbre des technologies', desc: 'Planifiez votre chemin de recherche, eurekas inclus', href: '/tools' },
-  { id: 'civictree', label: '📜 Arbre des dogmes', desc: 'Planifiez votre chemin civique et inspirations', href: '/tools?tree=civic' },
+  { id: 'techtree',  label: '⚗ Arbre des technologies', desc: 'Planifiez votre chemin de recherche, eurekas inclus',           href: '/tools' },
+  { id: 'civictree', label: '📜 Arbre des dogmes',       desc: 'Planifiez votre chemin civique et inspirations',                href: '/tools?tree=civic' },
+  { id: 'combat',    label: '⚔ Calculateur de combat',  desc: 'Simulez les trades unité contre unité avec tous les modifieurs', href: '/tools?tool=combat' },
 ];
 
 export default function Home() {
@@ -131,8 +132,8 @@ export default function Home() {
         .link-desc { font-size: .82rem; color: var(--text2); line-height: 1.5; }
         .link-arrow { float: right; color: var(--text3); font-size: .9rem; }
 
-        /* Tools panel */
-        .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        /* Tools panel — 3 colonnes desktop, 1 colonne mobile */
+        .tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
         .tool-card {
           background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
           padding: 20px 18px; text-decoration: none; display: block;
